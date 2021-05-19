@@ -91,6 +91,7 @@ LOCAL_SHARED_LIBRARIES := \
     libdl \
     libexpat \
     libhardware_legacy
+ifeq ($(TARGET_USES_QSSI)),true)
 
 LOCAL_MODULE := sound_trigger.primary.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_RELATIVE_PATH := hw
@@ -104,6 +105,7 @@ LOCAL_COPY_HEADERS      := sound_trigger_prop_intf.h
 
 include $(BUILD_SHARED_LIBRARY)
 
+endif
 #
 # to build sound_trigger_test executable
 # uncomment the lines below
