@@ -35,6 +35,7 @@ LOCAL_C_INCLUDES += \
     vendor/qcom/opensource/core-utils/fwk-detect \
     vendor/qcom/opensource/pal \
 
+ifeq ($(TARGET_USES_QSSI)),true)
 LOCAL_MODULE := sound_trigger.primary.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MODULE_OWNER := qti
@@ -43,4 +44,4 @@ LOCAL_VENDOR_MODULE := true
 LOCAL_MULTILIB := $(AUDIOSERVER_MULTILIB)
 
 include $(BUILD_SHARED_LIBRARY)
-
+endif
