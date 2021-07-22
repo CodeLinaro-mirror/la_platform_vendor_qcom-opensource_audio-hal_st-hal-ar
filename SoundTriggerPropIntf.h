@@ -1,4 +1,4 @@
-/* sound_trigger_prop_intf.h
+/* SoundTriggerPropIntf.h
  *
  * Interface for sound trigger related communication
  * across modules.
@@ -34,26 +34,18 @@
 #define SOUND_TRIGGER_PROP_INTF_H
 
 #include <hardware/sound_trigger.h>
-#include "tinyalsa/asoundlib.h"
+#include "audio_extn.h"
 
 #define MAKE_HAL_VERSION(maj, min) ((((maj) & 0xff) << 8) | ((min) & 0xff))
 #define MAJOR_VERSION(ver) (((ver) & 0xff00) >> 8)
 #define MINOR_VERSION(ver) ((ver) & 0x00ff)
 
-/* Proprietary interface version used for compatibility with AHAL */
-#define STHAL_PROP_API_VERSION_2_0 MAKE_HAL_VERSION(2, 0)
-#define STHAL_PROP_API_CURRENT_VERSION STHAL_PROP_API_VERSION_2_0
+/* Interface version used for compatibility with AHAL */
+#define STHAL_PROP_API_VERSION_1_0 MAKE_HAL_VERSION(1, 0)
+#define STHAL_PROP_API_VERSION_1_1 MAKE_HAL_VERSION(1, 1)
+#define STHAL_PROP_API_CURRENT_VERSION STHAL_PROP_API_VERSION_1_1
 
 #define ST_EVENT_CONFIG_MAX_STR_VALUE 32
-
-enum sound_trigger_event_type {
-    ST_EVENT_SESSION_REGISTER,
-    ST_EVENT_SESSION_DEREGISTER,
-    ST_EVENT_START_KEEP_ALIVE,
-    ST_EVENT_STOP_KEEP_ALIVE,
-    ST_EVENT_UPDATE_ECHO_REF
-};
-typedef enum sound_trigger_event_type sound_trigger_event_type_t;
 
 enum audio_event_type {
     AUDIO_EVENT_CAPTURE_DEVICE_INACTIVE,
@@ -93,13 +85,6 @@ enum ssr_event_status {
     SLPI_STATUS_ONLINE
 };
 
-struct sound_trigger_session_info {
-    void* p_ses; /* opaque pointer to st_session obj */
-    int capture_handle;
-    struct pcm *pcm;
-    struct pcm_config config;
-};
-
 struct audio_read_samples_info {
     struct sound_trigger_session_info *ses_info;
     void *buf;
@@ -110,13 +95,8 @@ struct audio_hal_usecase {
     audio_stream_usecase_type_t type;
 };
 
-struct sound_trigger_event_info {
-    struct sound_trigger_session_info st_ses;
-    bool st_ec_ref_enabled;
-};
-
 struct sound_trigger_device_info {
-    struct listnode devices;
+    int device;
 };
 
 struct sound_trigger_get_param_data {
@@ -124,8 +104,6 @@ struct sound_trigger_get_param_data {
     int sm_handle;
     struct str_parms *reply;
 };
-
-typedef struct sound_trigger_event_info sound_trigger_event_info_t;
 
 struct audio_event_info {
     union {
@@ -174,8 +152,8 @@ typedef int (*sound_trigger_hw_get_version_t)();
 typedef void (*sthw_extn_get_fptrs_t)(sthw_extn_fptrs_t *fptrs);
 
 /* AHAL callback which is called by STHAL */
-typedef void (*audio_hw_call_back_t)(enum sound_trigger_event_type,
-                          struct sound_trigger_event_info*);
+typedef void (*audio_hw_call_back_t)(sound_trigger_event_type_t event,
+                          sound_trigger_event_info_t* config);
 
 /* AHAL function which is called by STHAL */
 typedef int (*audio_hw_acdb_init_t)(int snd_card_num);
