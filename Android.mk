@@ -5,6 +5,15 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+ifeq ($(PRODUCT_NAME), msmnile_gvmq)
+LOCAL_ARM_MODE             := arm
+LOCAL_MODULE               := sound_trigger.primary.$(TARGET_BOARD_PLATFORM).ar
+LOCAL_MODULE_TAGS          := optional
+LOCAL_MODULE_OWNER         := qti
+LOCAL_MODULE_RELATIVE_PATH := hw
+LOCAL_MULTILIB             := $(AUDIOSERVER_MULTILIB)
+LOCAL_VENDOR_MODULE        := true
+else
 LOCAL_ARM_MODE             := arm
 LOCAL_MODULE               := sound_trigger.primary.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_TAGS          := optional
@@ -12,6 +21,7 @@ LOCAL_MODULE_OWNER         := qti
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MULTILIB             := $(AUDIOSERVER_MULTILIB)
 LOCAL_VENDOR_MODULE        := true
+endif
 
 LOCAL_CFLAGS += -Wall -Werror
 LOCAL_CFLAGS += -DSOUND_TRIGGER_PLATFORM=$(TARGET_BOARD_PLATFORM)
