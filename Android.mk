@@ -13,7 +13,10 @@ LOCAL_MODULE_OWNER         := qti
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MULTILIB             := $(AUDIOSERVER_MULTILIB)
 LOCAL_VENDOR_MODULE        := true
-else
+include $(BUILD_SHARED_LIBRARY)
+endif
+
+ifeq ($(PRODUCT_NAME), msmnile_gvmgh)
 LOCAL_ARM_MODE             := arm
 LOCAL_MODULE               := sound_trigger.primary.$(TARGET_BOARD_PLATFORM)
 LOCAL_MODULE_TAGS          := optional
@@ -21,6 +24,7 @@ LOCAL_MODULE_OWNER         := qti
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MULTILIB             := $(AUDIOSERVER_MULTILIB)
 LOCAL_VENDOR_MODULE        := true
+include $(BUILD_SHARED_LIBRARY)
 endif
 
 LOCAL_CFLAGS += -Wall -Werror
@@ -64,6 +68,5 @@ ifeq ($(strip $(AUDIO_FEATURE_ENABLED_LSM_HIDL)),true)
     LOCAL_CFLAGS += -DLSM_HIDL_ENABLED
 endif
 
-include $(BUILD_SHARED_LIBRARY)
 endif #TARGET_USES_QCOM_MM_AUDIO
 endif #AUDIO_USE_STUB_HAL
