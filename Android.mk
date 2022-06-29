@@ -46,7 +46,7 @@ ifeq ($(strip $(AUDIO_FEATURE_ENABLED_LSM_HIDL)),true)
     LOCAL_CFLAGS += -DLSM_HIDL_ENABLED
 endif
 
-ifeq ($(PRODUCT_NAME), msmnile_gvmq)
+ifneq (,$(filter $(PRODUCT_NAME), msmnile_gvmq msmnile_au))
 LOCAL_ARM_MODE             := arm
 LOCAL_MODULE               := sound_trigger.primary.$(TARGET_BOARD_PLATFORM).ar
 LOCAL_MODULE_TAGS          := optional
