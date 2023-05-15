@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2019-2021, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -530,11 +531,11 @@ int SoundTriggerDevice::LoadAudioHal()
 
     ALOGD("%s: Enter", __func__);
 
-    snprintf(audio_hal_lib, sizeof(audio_hal_lib), "%s/%s.%s.so",
+    snprintf(audio_hal_lib, sizeof(audio_hal_lib), "%s/%s.%s.ar.so",
              AUDIO_HAL_LIBRARY_PATH1, AUDIO_HAL_NAME_PREFIX,
              XSTR(SOUND_TRIGGER_PLATFORM));
     if (access(audio_hal_lib, R_OK)) {
-        snprintf(audio_hal_lib, sizeof(audio_hal_lib), "%s/%s.%s.so",
+        snprintf(audio_hal_lib, sizeof(audio_hal_lib), "%s/%s.%s.ar.so",
                  AUDIO_HAL_LIBRARY_PATH2, AUDIO_HAL_NAME_PREFIX,
                  XSTR(SOUND_TRIGGER_PLATFORM));
         if (access(audio_hal_lib, R_OK)) {
