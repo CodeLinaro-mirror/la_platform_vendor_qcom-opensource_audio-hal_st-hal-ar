@@ -7,7 +7,10 @@ LOCAL_MODULE               := libsoundtriggerhal.qti
 LOCAL_VENDOR_MODULE        := true
 LOCAL_MODULE_RELATIVE_PATH := hw
 
-LOCAL_C_INCLUDES            := $(LOCAL_PATH)/inc
+LOCAL_C_INCLUDES            := $(LOCAL_PATH)/inc \
+                               $(TOP)/system/media/audio_route/include \
+                               $(TOP)/system/media/audio/include \
+
 
 LOCAL_VINTF_FRAGMENTS      := configs/soundtrigger.qti.xml
 
