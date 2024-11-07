@@ -68,5 +68,61 @@ LOCAL_VENDOR_MODULE        := true
 include $(BUILD_SHARED_LIBRARY)
 endif
 
+ifeq ($(TARGET_USES_GY), true)
+include $(CLEAR_VARS)
+
+LOCAL_CFLAGS += -Wall -Werror
+LOCAL_CFLAGS += -DSOUND_TRIGGER_PLATFORM=$(TARGET_BOARD_PLATFORM)
+LOCAL_CFLAGS += -DAUDIO_FRAMEWORK_AWE
+
+LOCAL_C_INCLUDES += \
+    system/media/audio_utils/include \
+    external/expat/lib \
+    vendor/qcom/opensource/core-utils/fwk-detect \
+    vendor/qcom/opensource/awe-pal \
+    vendor/qcom/opensource/audio-hal-ar/primary-hal/hal-pal/audio_extn \
+    vendor/qcom/opensource/audio-hal-ar/primary-hal/hal-pal
+
+LOCAL_SRC_FILES := \
+    SoundTriggerDevice.cpp \
+    SoundTriggerSession.cpp
+
+LOCAL_HEADER_LIBRARIES := \
+    libhardware_headers \
+    libsystem_headers \
+    libawepal_headers
+
+LOCAL_SHARED_LIBRARIES := \
+    libbase \
+    liblog \
+    libcutils \
+    libdl \
+    libaudioutils \
+    libexpat \
+    libhidlbase \
+    libprocessgroup \
+    libutils \
+    libawe-pal
+
+ifeq ($(strip $(AUDIO_FEATURE_ENABLED_LSM_HIDL)),true)
+    LOCAL_HEADER_LIBRARIES += liblisten_headers
+
+    LOCAL_SHARED_LIBRARIES += \
+        vendor.qti.hardware.ListenSoundModel@1.0-impl \
+        vendor.qti.hardware.ListenSoundModel@1.0
+
+    LOCAL_CFLAGS += -DLSM_HIDL_ENABLED
+endif
+
+LOCAL_ARM_MODE             := arm
+LOCAL_MODULE               := sound_trigger.primary.$(TARGET_BOARD_PLATFORM).awe
+LOCAL_MODULE_TAGS          := optional
+LOCAL_MODULE_OWNER         := qti
+LOCAL_MODULE_RELATIVE_PATH := hw
+LOCAL_MULTILIB             := $(AUDIOSERVER_MULTILIB)
+LOCAL_VENDOR_MODULE        := true
+include $(BUILD_SHARED_LIBRARY)
+endif #TARGET_USES_GY
+
 endif #TARGET_USES_QCOM_MM_AUDIO
 endif #AUDIO_USE_STUB_HAL

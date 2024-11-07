@@ -531,13 +531,25 @@ int SoundTriggerDevice::LoadAudioHal()
 
     ALOGD("%s: Enter", __func__);
 
+#ifdef AUDIO_FRAMEWORK_AWE
+    snprintf(audio_hal_lib, sizeof(audio_hal_lib), "%s/%s.%s.awe.so",
+             AUDIO_HAL_LIBRARY_PATH1, AUDIO_HAL_NAME_PREFIX,
+             XSTR(SOUND_TRIGGER_PLATFORM));
+#else
     snprintf(audio_hal_lib, sizeof(audio_hal_lib), "%s/%s.%s.ar.so",
              AUDIO_HAL_LIBRARY_PATH1, AUDIO_HAL_NAME_PREFIX,
              XSTR(SOUND_TRIGGER_PLATFORM));
+#endif
     if (access(audio_hal_lib, R_OK)) {
+#ifdef AUDIO_FRAMEWORK_AWE
+        snprintf(audio_hal_lib, sizeof(audio_hal_lib), "%s/%s.%s.awe.so",
+                 AUDIO_HAL_LIBRARY_PATH2, AUDIO_HAL_NAME_PREFIX,
+                 XSTR(SOUND_TRIGGER_PLATFORM));
+#else
         snprintf(audio_hal_lib, sizeof(audio_hal_lib), "%s/%s.%s.ar.so",
                  AUDIO_HAL_LIBRARY_PATH2, AUDIO_HAL_NAME_PREFIX,
                  XSTR(SOUND_TRIGGER_PLATFORM));
+#endif
         if (access(audio_hal_lib, R_OK)) {
             ALOGE("%s: ERROR. %s not found", __func__, audio_hal_lib);
             status = -ENOENT;
