@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2023-2025 Qualcomm Innovation Center, Inc. All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause-Clear
  */
 
@@ -107,7 +107,7 @@ exit:
         delete paramPayload;
 
     STHAL_VERBOSE(LOG_TAG, "Exit, status = %d, version = %s", status, version);
-    return version;
+    return std::string(version);
 }
 
 int SoundTriggerSession::palCallback(pal_stream_handle_t *streamHandle,
