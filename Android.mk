@@ -11,6 +11,9 @@ LOCAL_C_INCLUDES            := $(LOCAL_PATH)/inc \
                                $(TOP)/system/media/audio_route/include \
                                $(TOP)/system/media/audio/include \
 
+ifneq ($(filter $(TARGET_BOARD_DERIVATIVE_SUFFIX), _sdv _cdcsdv),)
+LOCAL_CFLAGS        := -DRBVM
+endif
 
 LOCAL_VINTF_FRAGMENTS      := configs/soundtrigger.qti.xml
 
