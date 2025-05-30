@@ -1,3 +1,4 @@
+ifeq ($(TARGET_BOARD_PLATFORM), monaco)
 ifneq ($(AUDIO_USE_STUB_HAL), true)
 
 LOCAL_PATH := $(call my-dir)
@@ -32,3 +33,4 @@ LOCAL_SHARED_LIBRARIES := \
 
 include $(BUILD_SHARED_LIBRARY)
 endif #AUDIO_USE_STUB_HAL
+endif
