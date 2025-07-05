@@ -22,13 +22,13 @@ SharedMemoryWrapper::SharedMemoryWrapper(int fd, int size) :
 {
     if ((mSharedMemoryFd < 0) || !ashmem_valid(mSharedMemoryFd) ||
         (mExpectedMmapSize != ashmem_get_size_region(mSharedMemoryFd))) {
-            LOG_ALWAYS_FATAL("Invalid SharedMemory fd %d", __func__, mSharedMemoryFd);
+            LOG_ALWAYS_FATAL("%s: Invalid SharedMemory fd %d", __func__, mSharedMemoryFd);
     } else {
         STHAL_INFO(LOG_TAG, "SharedMemory fd %d, size %d", mSharedMemoryFd, size);
 
         mSharedMemory = mmap(NULL, mExpectedMmapSize, PROT_READ, MAP_SHARED, mSharedMemoryFd, 0);
         if (mSharedMemory == MAP_FAILED) {
-            LOG_ALWAYS_FATAL("Failed to map SharedMemory fd %d", __func__, mSharedMemoryFd);
+            LOG_ALWAYS_FATAL("%s: Failed to map SharedMemory fd %d", __func__, mSharedMemoryFd);
         }
     }
 }
