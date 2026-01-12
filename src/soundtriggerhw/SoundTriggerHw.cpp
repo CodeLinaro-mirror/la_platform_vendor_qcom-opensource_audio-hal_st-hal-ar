@@ -1,6 +1,6 @@
 /*
- * Copyright (c) 2023-2024 Qualcomm Innovation Center, Inc. All rights reserved.
- * SPDX-License-Identifier: BSD-3-Clause-Clear
+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+ * SPDX-License-Identifier: BSD-3-Clause-Clear.
  */
 
 #define LOG_TAG "STHAL: SoundTriggerHw"
@@ -81,7 +81,7 @@ void SoundTriggerHw::addSession(std::shared_ptr<SoundTriggerSession> &session)
     std::lock_guard<std::mutex> lock(mMutex);
     mSessions[session->getSessionHandle()] = session;
 
-    STHAL_INFO(LOG_TAG, "handle %d, sessions %d", session->getSessionHandle(), mSessions.size());
+    STHAL_INFO(LOG_TAG, "handle %d, sessions %zu", session->getSessionHandle(), mSessions.size());
 }
 
 void SoundTriggerHw::removeSession(int32_t handle)
