@@ -26,12 +26,26 @@ using android::OK;
         }                                                            \
     })
 
+
+// Return success if stub hal is enabled
+#define RETURN_IF_STUB_HAL_ENABLED()                                      \
+     ({                                                                   \
+        if (mStubHal) {                                                   \
+            STHAL_INFO(LOG_TAG, "Exit with success as Stub HAL enabled"); \
+            return CoreUtils::halErrorToAidl(0);                          \
+        }                                                                 \
+     })
+
+
 namespace aidl::android::hardware::soundtrigger3 {
 
-SoundTriggerHw::SoundTriggerHw()
+SoundTriggerHw::SoundTriggerHw(bool stubMode)
 {
-    STHAL_INFO(LOG_TAG, "Enter");
+    char prop_value[PROPERTY_VALUE_MAX];
+    STHAL_INFO(LOG_TAG, "Enter: stubMode: %d", stubMode);
     mSoundTriggerInitDone = true;
+    mStubHal = stubMode;
+
 }
 
 SoundTriggerHw::~SoundTriggerHw()
@@ -44,6 +58,7 @@ ScopedAStatus SoundTriggerHw::registerGlobalCallback(
 {
     int status = 0;
     pal_param_resources_available_t param_resource_avail;
+    RETURN_IF_STUB_HAL_ENABLED();
 
     STHAL_VERBOSE(LOG_TAG, "Enter");
 
@@ -96,6 +111,8 @@ ScopedAStatus SoundTriggerHw::getProperties(Properties *aidlProperties)
     struct pal_st_properties *palProperties = nullptr;
     size_t size = 0;
 
+    RETURN_IF_STUB_HAL_ENABLED();
+
     STHAL_VERBOSE(LOG_TAG, "Enter");
 
     status = pal_get_param(PAL_PARAM_ID_GET_SOUND_TRIGGER_PROPERTIES,
@@ -123,6 +140,8 @@ ScopedAStatus SoundTriggerHw::loadSoundModel(
 {
     int status = 0;
 
+    RETURN_IF_STUB_HAL_ENABLED();
+
     STHAL_INFO(LOG_TAG, "Enter");
 
     *handle = nextUniqueModelId();
@@ -149,6 +168,8 @@ ScopedAStatus SoundTriggerHw::loadPhraseSoundModel(
 {
     int status = 0;
 
+    RETURN_IF_STUB_HAL_ENABLED();
+
     STHAL_INFO(LOG_TAG, "Enter");
 
     *handle = nextUniqueModelId();
@@ -171,6 +192,8 @@ ScopedAStatus SoundTriggerHw::loadPhraseSoundModel(
 ScopedAStatus SoundTriggerHw::unloadSoundModel(int32_t handle)
 {
     int status = 0;
+
+    RETURN_IF_STUB_HAL_ENABLED();
 
     STHAL_INFO(LOG_TAG, "Enter handle %d", handle);
 
@@ -198,6 +221,8 @@ ScopedAStatus SoundTriggerHw::startRecognition(
 {
     int status = 0;
 
+    RETURN_IF_STUB_HAL_ENABLED();
+
     STHAL_INFO(LOG_TAG, "Enter handle %d", modelHandle);
 
     auto st_session = getSession(modelHandle);
@@ -217,6 +242,8 @@ ScopedAStatus SoundTriggerHw::startRecognition(
 ScopedAStatus SoundTriggerHw::stopRecognition(int32_t handle)
 {
     int status = 0;
+
+    RETURN_IF_STUB_HAL_ENABLED();
 
     STHAL_INFO(LOG_TAG, "Enter handle %d", handle);
 
@@ -238,6 +265,8 @@ ScopedAStatus SoundTriggerHw::stopRecognition(int32_t handle)
 ScopedAStatus SoundTriggerHw::forceRecognitionEvent(int32_t handle)
 {
     int status = -ENOSYS;
+
+    RETURN_IF_STUB_HAL_ENABLED();
 
     STHAL_INFO(LOG_TAG, "unsupported API");
     return CoreUtils::halErrorToAidl(status);

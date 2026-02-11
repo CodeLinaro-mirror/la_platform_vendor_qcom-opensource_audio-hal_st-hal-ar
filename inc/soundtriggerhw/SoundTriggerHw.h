@@ -15,7 +15,8 @@ using ::ndk::ScopedAStatus;
 
 class SoundTriggerHw : public BnSoundTriggerHw {
 public:
-    SoundTriggerHw();
+    SoundTriggerHw(bool stubMode);
+
     ~SoundTriggerHw();
 
     ScopedAStatus getProperties(Properties *aidlProperties) override;
@@ -60,6 +61,7 @@ private:
     std::atomic<int32_t> mNextUniqueHandle = 0;
     inline int32_t nextUniqueModelId() { return mNextUniqueHandle++; }
     bool mSoundTriggerInitDone = false;
+    bool mStubHal = false;
     std::unordered_map<int32_t, std::shared_ptr<SoundTriggerSession>> mSessions;
     std::mutex mMutex;
 };

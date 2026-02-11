@@ -13,14 +13,13 @@
 
 using aidl::android::hardware::soundtrigger3::SoundTriggerHw;
 
-extern "C" __attribute__((visibility("default"))) binder_status_t
-createISoundTriggerFactory()
+static inline binder_status_t registerServiceImpl(bool stubMode)
 {
+    std::shared_ptr<SoundTriggerHw> soundTriggerFactory =
+                ::ndk::SharedRefBase::make<SoundTriggerHw>(stubMode /* stub */);
 
-    binder_status_t status;
+    binder_status_t status = soundTriggerFactory->isInitDone();
 
-    auto soundTriggerFactory = ::ndk::SharedRefBase::make<SoundTriggerHw>();
-    status = soundTriggerFactory->isInitDone();
     if (!status) {
         STHAL_ERR(LOG_TAG, "SoundTriggerHw initialization failed.");
         return STATUS_INVALID_OPERATION;
@@ -37,3 +36,25 @@ createISoundTriggerFactory()
     }
     return status;
 }
+
+/**
+ *  * Creates the standard implementation of the SoundTrigger factory
+ *   * that communicates with the actual hardware.
+ *    */
+extern "C" __attribute__((visibility("default"))) binder_status_t
+createISoundTriggerFactory()
+{
+    return registerServiceImpl(false /* stubMode */);
+}
+
+/**
+ *  * Creates a stub implementation of the SoundTrigger factory.
+ *   * This is used for testing or when the actual hardware implementation
+ *    * does not exist.
+ *     */
+extern "C" __attribute__((visibility("default"))) binder_status_t
+createStubISoundTriggerFactory()
+{
+    return registerServiceImpl(true /* stubMode */);
+}
+
