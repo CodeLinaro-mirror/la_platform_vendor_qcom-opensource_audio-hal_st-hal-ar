@@ -3,6 +3,8 @@ ifneq ($(AUDIO_USE_STUB_HAL), true)
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
+
+LOCAL_CFLAGS   += -fstack-protector-strong -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2
 LOCAL_MODULE               := libsoundtriggerhal.qti
 LOCAL_VENDOR_MODULE        := true
 LOCAL_MODULE_RELATIVE_PATH := hw
